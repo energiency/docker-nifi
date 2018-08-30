@@ -1,4 +1,4 @@
-FROM       energiency/docker-nifi-base:1.7.0
+FROM       energiency/docker-nifi-base:1.7.1
 MAINTAINER Viacheslav Kalashnikov <xemuliam@gmail.com>
 ENV        BANNER_TEXT="" \
            S2S_PORT=""

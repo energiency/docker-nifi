@@ -7,12 +7,18 @@ do_site2site_configure() {
   sed -i "s/nifi\.remote\.input\.host=.*/nifi.remote.input.host=${HOSTNAME}/g" ${NIFI_HOME}/conf/nifi.properties
   sed -i "s/nifi\.remote\.input\.socket\.port=.*/nifi.remote.input.socket.port=${S2S_PORT:-2881}/g" ${NIFI_HOME}/conf/nifi.properties
   sed -i "s/nifi\.remote\.input\.secure=true/nifi.remote.input.secure=false/g" ${NIFI_HOME}/conf/nifi.properties
-}
+
+  }
 
 do_cluster_node_configure() {
   sed -i "s/nifi\.web\.http\.host=.*/nifi.web.http.host=${HOSTNAME}/g" ${NIFI_HOME}/conf/nifi.properties
 
   ZK_NODES=$(echo ${ZK_NODES_LIST} | sed -e "s/\s/,/g" -e "s/\(,\)*/\1/g")
+  
+  sed -i "s/nifi\.web\.http\.port=.*/nifi.cluster.node.connection.timeout=${NIFI.CLUSTER.NODE.CONNECTION.TIMEOUT}/g" ${NIFI_HOME}/conf/nifi.properties
+  sed -i "s/nifi\.web\.http\.port=.*/nifi.cluster.node.read.timeout=${NIFI.CLUSTER.NODE.READ.TIMEOUT}/g" ${NIFI_HOME}/conf/nifi.properties
+  sed -i "s/nifi\.web\.http\.port=.*/nifi.zookeeper.connect.timeout=${NIFI.ZOOKEEPER.CONNECT.TIMEOUT}/g" ${NIFI_HOME}/conf/nifi.properties
+  sed -i "s/nifi\.web\.http\.port=.*/nifi.zookeeper.session.timeout=${NIFI.ZOOKEEPER.SESSION.TIMEOUT}/g" ${NIFI_HOME}/conf/nifi.properties
 
   sed -i "s/clientPort=.*/clientPort=${ZK_CLIENT_PORT:-2181}/g" ${NIFI_HOME}/conf/zookeeper.properties
   ZK_CONNECT_STRING=$(echo $ZK_NODES | sed -e "s/,/:${ZK_CLIENT_PORT:-2181},/g" -e "s/$/:${ZK_CLIENT_PORT:-2181}/g")

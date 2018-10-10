@@ -58,5 +58,11 @@ if [ ! -z "$FLOW_CONF_FOLDER_NAME" ]; then
   wget https://jdbc.postgresql.org/download/postgresql-42.1.4.jar -O ${NIFI_HOME}/conf/${FLOW_CONF_FOLDER_NAME}/drivers/postgresql-42.1.4.jar
 fi
 
+if [ ! -z "$JAVA_HEAP_SIZE" ]; then
+  echo "Using ${JAVA_HEAP_SIZE} of memory for the Nifi Java process"
+  sed -i "s/Xms.*m/Xms$JAVA_HEAP_SIZE/g" ${NIFI_HOME}/conf/bootstrap.conf
+  sed -i "s/Xmx.*m/Xmx$JAVA_HEAP_SIZE/g" ${NIFI_HOME}/conf/bootstrap.conf
+fi
+
 tail -F ${NIFI_HOME}/logs/nifi-app.log &
 ${NIFI_HOME}/bin/nifi.sh run

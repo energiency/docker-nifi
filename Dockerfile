@@ -1,11 +1,8 @@
-FROM       energiency/docker-nifi-base:1.7.1
-MAINTAINER Viacheslav Kalashnikov <xemuliam@gmail.com>
-ENV        BANNER_TEXT="" \
-           S2S_PORT=""
-COPY       start_nifi.sh /${NIFI_HOME}/
-VOLUME     /opt/datafiles \
-           /opt/scriptfiles \
-           /opt/certfiles
+FROM       apache/nifi:1.7.1
+COPY       set_additional_properties_and_start.sh ${NIFI_HOME}/../scripts
 WORKDIR    ${NIFI_HOME}
-RUN        chmod +x ./start_nifi.sh
-CMD        ./start_nifi.sh
+USER       root
+RUN        chmod +x ../scripts/set_additional_properties_and_start.sh
+USER       nifi
+ENTRYPOINT ["../scripts/set_additional_properties_and_start.sh"]
+
